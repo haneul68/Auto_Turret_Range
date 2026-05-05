@@ -32,18 +32,6 @@ Muzzle_Point.forward 방향을 기준으로 판정합니다.
 포탑이 조준 상태일 때 일정 간격으로 발사체를 생성합니다.
 발사체는 Object Pooling 방식으로 재사용됩니다.
 
-오브젝트 구조
-Turret
-├── Body
-└── Yaw_Pivot
-    └── Pitch_Pivot
-        ├── Head
-        ├── Barrel
-        └── Muzzle_Point
-
-Target
-
-Projectile_Pool_Manager
 핵심 개념
 
 Transform 계층 구조를 활용하여 회전을 분리했습니다.
