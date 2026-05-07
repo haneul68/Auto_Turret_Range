@@ -1,37 +1,41 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile_Pool_Manager : MonoBehaviour
 {
-    [Header("Pool")]
     [SerializeField]
     private Projectile_Mover projectile_Prefab;
-    [SerializeField] 
-    private int pool_Count = 20;
 
-    private Queue<Projectile_Mover> projectile_Queue = new Queue<Projectile_Mover>();
+    [SerializeField]
+    private int default_Count = 20;
+
+    [SerializeField]
+    private int max_Count = 40;
+
+    private Local_Object_Pool<Projectile_Mover> projectile_Pool;
 
     private void Awake()
     {
-        Create_Pool();
-    }
-
-    private void Create_Pool()
-    {
-        for (int i = 0; i < pool_Count; i++)
-        {
-            Projectile_Mover projectile = Instantiate(projectile_Prefab, transform);
-            projectile.gameObject.SetActive(false);
-            projectile_Queue.Enqueue(projectile);
-        }
+        projectile_Pool =
+            new Local_Object_Pool<Projectile_Mover>
+            (
+                projectile_Prefab,
+                transform,
+                default_Count,
+                max_Count
+            );
     }
 
     public Projectile_Mover Get_Projectile()
     {
-        Projectile_Mover projectile = projectile_Queue.Dequeue();
+        Projectile_Mover projectile = projectile_Pool.Get();
 
-        projectile_Queue.Enqueue(projectile);
+        projectile.Set_Pool(this);
 
         return projectile;
+    }
+
+    public void Return_Projectile(Projectile_Mover projectile)
+    {
+        projectile_Pool.Return(projectile);
     }
 }
